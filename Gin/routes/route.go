@@ -5,16 +5,25 @@ import (
 	"net/http"
 )
 
+type Usuario struct {
+	Nombre string `json:"nombre"`
+	Email  string `json:"email"`
+}
+
+var usuarios []Usuario
+
 func SetupRoutes(r *gin.Engine) {
+	r.LoadHTMLGlob("template/*")
 
 	r.GET("/", func(c *gin.Context) {
 
-		c.String(http.StatusOK, "Hoal Mundo!")
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"Title":   "Mi Aplicación",
+			"Heading": "¡Hola Mundo!",
+			"Message": "Bienvenido a mi aplicación web con Gin y platilla HTML",
+		})
 	})
 
-	r.GET("/saludo/:nombre", func(c *gin.Context) {
-		nombre := c.Param("nombre")
-		c.String(http.StatusOK, "Hola, %s!", nombre)
-	})
+	r.Static("/static", "./static")
 
 }
